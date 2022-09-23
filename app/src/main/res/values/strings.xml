@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">P1</string>
     <string name="km_atual">Quilometragem Atual</string>
-    <string name="qtd_abastec">Quantidade abastecida</string>
-    <string name="dia">Dia</string>
+    <string name="qtd_abastec">Quantidade Abastecida</string>
+    <string name="dia">Dia do Abastecimento</string>
     <string name="valor">Valor Abastecido</string>
+    <string name="btnSalvar">Salvar Dados</string>
+    <string name="media">Média de Consumo</string>
+    <string name="mediareal"></string>
 </resources>
