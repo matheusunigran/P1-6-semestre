@@ -49,12 +49,10 @@ public class abastecimento {
 
     @Override
     public String toString() {
-        return "abastecimento{" +
-                "kmAtual='" + kmAtual + '\'' +
-                ", qtdAbastecida='" + qtdAbastecida + '\'' +
-                ", dia='" + dia + '\'' +
-                ", valor='" + valor + '\'' +
-                ", id=" + id +
-                '}';
+        return
+                "kmAtual - " + kmAtual + " Km " +
+                        " | qtdAbastecida - " + qtdAbastecida + " L" +
+                        " | dia - " + dia +
+                        " | valor - " + valor;
     }
 }

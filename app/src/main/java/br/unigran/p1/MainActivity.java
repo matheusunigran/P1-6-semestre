@@ -17,13 +17,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unigran.p1.R;
 import br.unigran.p1.bancoDados.DBHelper;
 import br.unigran.p1.bancoDados.abastecimentoDB;
 import br.unigran.p1.Entidades.abastecimento;
-
-
-import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         //banco de dados
         db = new DBHelper(this);
+
         //mapeia campos da tela
         kmAtual = findViewById(R.id.quilometragemAtualID);
         qtdAbastecida = findViewById(R.id.qtdaAbastecidaID);
@@ -53,18 +50,24 @@ public class MainActivity extends AppCompatActivity {
         valor = findViewById(R.id.valorAbastecidoID);
         media = findViewById(R.id.mediaID);
         listagem = findViewById(R.id.listID);
-        dados = new ArrayList(); //aloca lista
+
+        //aloca lista
+        dados = new ArrayList();
+
         //vincula adapter
         ArrayAdapter adapter = new ArrayAdapter(this,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, dados);
         listagem.setAdapter(adapter);
         abasDB = new abastecimentoDB(db);
         abasDB.lista(dados);//lista incial
+
+        //ações de remover e editar
         acoes();
     }
 
     private void acoes() {
         confirma = null;
+        //abre as opções que o usuário pode fazer com os dados
         listagem.setOnItemLongClickListener(
                 new AdapterView.OnItemLongClickListener() {
                     @Override
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
                         AlertDialog.Builder mensagem = new AlertDialog.Builder(view.getContext());
                         mensagem.setTitle("Opções");
                         mensagem.setMessage("Escolha a opção que deseja realizar");
+                        //opção de remoção
                         mensagem.setPositiveButton("Remover", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
@@ -95,13 +99,14 @@ public class MainActivity extends AppCompatActivity {
                                         .create().show();
                             }
                         });
+                        //opção de editar
                         mensagem.setNegativeButton("Editar", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 atualiza = dados.get(i).getId();
                                 kmAtual.setText(dados.get(i).getKmAtual());
-                                qtdAbastecida.setText(dados.get(i).getQtdAbastecida().toString());
-                                dia.setText(dados.get(i).getDia().toString());
-                                valor.setText(dados.get(i).getValor().toString());
+                                qtdAbastecida.setText(dados.get(i).getQtdAbastecida());
+                                dia.setText(dados.get(i).getDia());
+                                valor.setText(dados.get(i).getValor());
 
                                 abasDB.atualizar(dados.get(i));
                                 abasDB.lista(dados);
@@ -110,13 +115,14 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         });
+                        //cancela a escolha de opções
                         mensagem.setNeutralButton("Cancelar", null);
                         mensagem.show();
                         return false;
                     }
                 });
     }
-
+    //verifica se usuário entrou com dados, senão ele mostra uma mensagem
     public boolean verificar() {
         String s1 = kmAtual.getText().toString();
         String s2 = qtdAbastecida.getText().toString();
@@ -130,11 +136,18 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
-
+    //limpa os dados dos campos de entrada
+    private void limpar() {
+        kmAtual.setText("");
+        qtdAbastecida.setText("");
+        valor.setText("");
+        dia.setText("");
+    }
+    //salva os dados
     public void salvar(View view) {
-        if (verificar()) {
+        if (verificar()) { //se os dados estiverem preenchidos
             abastecimento abas = new abastecimento();
-            if (atualiza != null) {
+            if (atualiza != null) { //se a opção de atualizar estiver acionada
                 abas.setId(atualiza);
 
                 abasDB.lista(dados);
@@ -154,23 +167,13 @@ public class MainActivity extends AppCompatActivity {
             }
             abasDB.lista(dados);
             listagem.invalidateViews();
+            media.setText("calculo...");
             limpar();
             atualiza = null;
             confirma = null;
         }
     }
-
-    private void calcularMedia(){
-
-    }
-
-    private void limpar() {
-        kmAtual.setText("");
-        qtdAbastecida.setText("");
-        valor.setText("");
-        dia.setText("");
-    }
-
+    //cancela a edição ou sai do app
     @Override
     public void onBackPressed() {
         if (confirma != null) {
@@ -186,4 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+    //calcula a média de consumo
+    //private void calcularMedia(){}
+
 }
