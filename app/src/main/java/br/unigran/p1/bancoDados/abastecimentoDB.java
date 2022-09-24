@@ -50,7 +50,7 @@ public class abastecimentoDB {
         String names[] = {"id", "kmAtual", "qtdAbastecida", "dia", "valor"};
         Cursor query = conexao.query("Lista", names,
                 null, null, null,
-                null, "nome");
+                null, "dia");
         while (query.moveToNext()) {
             abastecimento abas = new abastecimento();
             abas.setId(Integer.parseInt(
